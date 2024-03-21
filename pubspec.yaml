@@ -1,14 +1,27 @@
 name: nymble_music
 description: "Task for Nymble interview. A simple music streaming app that uses Bloc, Hive and Supabase."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.3.1 <4.0.0'
+  sdk: ">=3.3.1 <4.0.0"
 
 dependencies:
+  animate_do: ^3.3.4
+  animations: ^2.0.11
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.1.4
+  google_fonts: ^6.2.1
+  supabase_flutter: ^2.3.4
+  hive_flutter: ^1.1.0
+  animated_progress_bar:
+    git:
+      url: https://github.com/Vidhanth/animated_progress_bar.git
+      ref: master
+  substring_highlight: ^1.0.33
+  audioplayers: ^6.0.0
+  connectivity_plus: ^6.0.1
 
 dev_dependencies:
   flutter_test:
