@@ -1,3 +1,5 @@
-# nymble_music
+# Nymble Music
 
-A new Flutter project.
+Assignment Project for Nymble.
+
+Uses Supabase for backend, hive for local storage and the Bloc architecture pattern.
