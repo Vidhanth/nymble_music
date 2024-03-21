@@ -37,7 +37,7 @@ class DetailsScreen extends StatelessWidget {
         body: Container(
           padding: const EdgeInsets.only(top: kBottomNavigationBarHeight + 20),
           decoration: BoxDecoration(
-            color: Theme.of(context).canvasColor,
+            color: Theme.of(context).scaffoldBackgroundColor,
             image: DecorationImage(
               opacity: 0.4,
               fit: BoxFit.cover,
@@ -111,8 +111,8 @@ class DetailsScreen extends StatelessWidget {
                           AnimatedProgressBar(
                             width: context.height * 0.5,
                             value: state.progress,
-                            bgColor: primaryColor.withOpacity(0.5),
-                            progressColor: primaryColor,
+                            bgColor: Theme.of(context).colorScheme.surfaceTint.withOpacity(0.5),
+                            progressColor: Theme.of(context).colorScheme.surfaceTint,
                             radius: BorderRadius.circular(20),
                           ),
                           const SizedBox(height: 16.0),
