@@ -7,6 +7,7 @@ import 'package:nymble_music/helpers/prefs_helper.dart';
 import 'package:nymble_music/presentation/components/button.dart';
 import 'package:nymble_music/presentation/components/input_field.dart';
 import 'package:nymble_music/presentation/components/logo/logo.dart';
+import 'package:nymble_music/presentation/constants/keys.dart';
 import 'package:nymble_music/presentation/constants/styles.dart';
 import 'package:nymble_music/presentation/screens/home_screen.dart';
 import 'package:nymble_music/utils/extensions.dart';
@@ -42,8 +43,8 @@ class _AuthScreenState extends State<AuthScreen> {
                 context.showSnackbar(state.error, isError: true);
               }
               if (state is AuthSuccess) {
-                PrefsHelper.instance.setString('email', emailController.text.trim());
-                PrefsHelper.instance.setString('password', passwordController.text.trim());
+                PrefsHelper.instance.setString(emailPrefsKey, emailController.text.trim());
+                PrefsHelper.instance.setString(passwordPrefsKey, passwordController.text.trim());
                 NavigationHelper.replace(context, page: const HomeScreen());
               }
             },
