@@ -55,23 +55,31 @@ class DetailsScreen extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  Hero(
-                    tag: song.albumUrl,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15.0),
-                      child: SizedBox(
-                        height: context.height * 0.45,
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Image.network(
-                            song.albumUrl,
-                            fit: BoxFit.cover,
+                  PhysicalModel(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(15),
+                    elevation: 10,
+                    child: Hero(
+                      tag: song.albumUrl,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15.0),
+                        child: SizedBox(
+                          height: context.height * 0.45,
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: Image.network(
+                              song.albumUrl,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
                   const Spacer(),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Text(
                     song.name,
                     style: montserratText.copyWith(
