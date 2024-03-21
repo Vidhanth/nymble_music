@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nymble_music/bloc/auth/auth_bloc.dart';
@@ -16,6 +17,7 @@ import 'package:nymble_music/presentation/components/songs_list.dart';
 import 'package:nymble_music/presentation/constants/styles.dart';
 import 'package:nymble_music/presentation/screens/auth_screen.dart';
 import 'package:nymble_music/presentation/screens/details_screen.dart';
+import 'package:nymble_music/utils/extensions.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -89,26 +91,32 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               const LogoLandscape(),
                               const Spacer(),
-                              GestureDetector(
-                                onTap: () {
-                                  context.read<ThemeBloc>().add(ThemeChanged());
-                                },
-                                child: CircleAvatar(
-                                  child: Icon((context.read<ThemeBloc>().state as ThemeSelected).darkMode ? Icons.light_mode : Icons.dark_mode),
+                              ZoomIn(
+                                delay: 1.seconds,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    context.read<ThemeBloc>().add(ThemeChanged());
+                                  },
+                                  child: CircleAvatar(
+                                    child: Icon((context.read<ThemeBloc>().state as ThemeSelected).darkMode ? Icons.light_mode : Icons.dark_mode),
+                                  ),
                                 ),
                               ),
                               const SizedBox(
                                 width: 10,
                               ),
-                              GestureDetector(
-                                onTap: () async {
-                                  final result = await showConfirmDialog(context, "Log Out?", "Are you sure you want to log out of Nymble Music?");
-                                  if (result) {
-                                    context.read<AuthBloc>().add(AuthLogoutRequested());
-                                  }
-                                },
-                                child: const CircleAvatar(
-                                  child: Icon(Icons.person),
+                              ZoomIn(
+                                delay: 1100.milliseconds,
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    final result = await showConfirmDialog(context, "Log Out?", "Are you sure you want to log out of Nymble Music?");
+                                    if (result) {
+                                      context.read<AuthBloc>().add(AuthLogoutRequested());
+                                    }
+                                  },
+                                  child: const CircleAvatar(
+                                    child: Icon(Icons.person),
+                                  ),
                                 ),
                               )
                             ],
@@ -124,12 +132,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                         if ((songsState is SongsLoaded) && (userState is UserLoaded)) ...[
-                          InputField(
-                            onChanged: (query) {
-                              context.read<SongsBloc>().add(SearchSongsRequested(query.trim().toLowerCase()));
-                            },
-                            controller: searchController,
-                            hint: "Search",
+                          FadeInUp(
+                            duration: 300.milliseconds,
+                            child: InputField(
+                              textInputAction: TextInputAction.search,
+                              onChanged: (query) {
+                                context.read<SongsBloc>().add(SearchSongsRequested(query.trim().toLowerCase()));
+                              },
+                              controller: searchController,
+                              hint: "Search",
+                            ),
                           ),
                           SingleChildScrollView(
                             padding: const EdgeInsets.only(bottom: 10, top: 5),
@@ -138,65 +150,76 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
-                                  child: FilterChip(
-                                    selected: songsState.userFavorites != null,
-                                    label: Text(
-                                      "Favorites",
-                                      style: montserratText,
-                                    ),
-                                    onSelected: (bool selected) {
-                                      SongsFavoritesOnlySelected event;
-                                      if (selected) {
-                                        event = SongsFavoritesOnlySelected(userState.user.favorites);
-                                      } else {
-                                        event = SongsFavoritesOnlySelected(null);
-                                      }
-                                      context.read<SongsBloc>().add(event);
-                                    },
-                                  ),
-                                ),
-                                ...songsState.allFilters.map(
-                                  (genre) => Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
+                                  child: FadeIn(
+                                    delay: 400.milliseconds,
                                     child: FilterChip(
-                                      selected: songsState.filter == genre,
+                                      selected: songsState.userFavorites != null,
                                       label: Text(
-                                        genre,
+                                        "Favorites",
                                         style: montserratText,
                                       ),
                                       onSelected: (bool selected) {
-                                        SearchFilterChanged event;
+                                        SongsFavoritesOnlySelected event;
                                         if (selected) {
-                                          event = SearchFilterChanged(genre);
+                                          event = SongsFavoritesOnlySelected(userState.user.favorites);
                                         } else {
-                                          event = SearchFilterChanged("");
+                                          event = SongsFavoritesOnlySelected(null);
                                         }
                                         context.read<SongsBloc>().add(event);
                                       },
                                     ),
                                   ),
+                                ),
+                                ...songsState.allFilters.map(
+                                  (genre) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(right: 8.0),
+                                      child: FadeIn(
+                                        delay: (songsState.allFilters.indexOf(genre) * 100 + 500).milliseconds,
+                                        child: FilterChip(
+                                          selected: songsState.filter == genre,
+                                          label: Text(
+                                            genre,
+                                            style: montserratText,
+                                          ),
+                                          onSelected: (bool selected) {
+                                            SearchFilterChanged event;
+                                            if (selected) {
+                                              event = SearchFilterChanged(genre);
+                                            } else {
+                                              event = SearchFilterChanged("");
+                                            }
+                                            context.read<SongsBloc>().add(event);
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 )
                               ],
                             ),
                           ),
                           Expanded(
-                            child: SongList(
-                              songs: songsState.filteredSongs,
-                              searchQuery: songsState.searchQuery,
-                              onAddToFavorites: (song) {
-                                context.read<UserBloc>().add(UserFavoritesUpdateRequested(song.id));
-                              },
-                              onTapped: (song) {
-                                NavigationHelper.to(
-                                  context,
-                                  page: BlocProvider(
-                                    create: (BuildContext context) => DetailsBloc(),
-                                    child: DetailsScreen(
-                                      song: song,
+                            child: FadeInUp(
+                              // delay: 500.milliseconds,
+                              child: SongList(
+                                songs: songsState.filteredSongs,
+                                searchQuery: songsState.searchQuery,
+                                onAddToFavorites: (song) {
+                                  context.read<UserBloc>().add(UserFavoritesUpdateRequested(song.id));
+                                },
+                                onTapped: (song) {
+                                  NavigationHelper.to(
+                                    context,
+                                    page: BlocProvider(
+                                      create: (BuildContext context) => DetailsBloc(),
+                                      child: DetailsScreen(
+                                        song: song,
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ],

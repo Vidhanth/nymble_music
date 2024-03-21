@@ -19,12 +19,12 @@ final class SongsLoaded extends SongsState {
   final String filter;
   final List<int>? userFavorites;
 
-  Set<String> get allFilters {
+  List<String> get allFilters {
     Set<String> filters = {};
     for (Song song in songs) {
       filters.addAll(song.genres);
     }
-    return filters;
+    return filters.toList();
   }
 
   SongsLoaded copyWith({List<Song>? songs, String? searchQuery, String? filter, List<int>? userFavorites}) {

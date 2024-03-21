@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nymble_music/bloc/auth/auth_bloc.dart';
@@ -5,6 +6,7 @@ import 'package:nymble_music/helpers/navigation_helper.dart';
 import 'package:nymble_music/presentation/components/logo/logo.dart';
 import 'package:nymble_music/presentation/screens/auth_screen.dart';
 import 'package:nymble_music/presentation/screens/home_screen.dart';
+import 'package:nymble_music/utils/extensions.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -27,22 +29,25 @@ class _SplashScreenState extends State<SplashScreen> {
       },
       child: Scaffold(
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Logo(),
-              const SizedBox(
-                height: 13,
-              ),
-              SizedBox(
-                height: 16,
-                width: 16,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Theme.of(context).colorScheme.surfaceTint,
+          child: ZoomIn(
+            duration: 1500.milliseconds,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Logo(),
+                const SizedBox(
+                  height: 13,
                 ),
-              )
-            ],
+                SizedBox(
+                  height: 16,
+                  width: 16,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Theme.of(context).colorScheme.surfaceTint,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

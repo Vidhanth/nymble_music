@@ -11,7 +11,7 @@ class NMBlocObserver extends BlocObserver {
     super.onCreate(bloc);
 
     if (bloc is AuthBloc) {
-      await Future.delayed(1.seconds);
+      await Future.delayed(1800.milliseconds);
       final email = PrefsHelper.instance.getString(emailPrefsKey);
       final password = PrefsHelper.instance.getString(passwordPrefsKey);
 

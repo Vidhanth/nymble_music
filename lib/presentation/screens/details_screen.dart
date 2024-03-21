@@ -100,20 +100,30 @@ class DetailsScreen extends StatelessWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        Text(
-                          song.name,
-                          style: montserratText.copyWith(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
+                        FadeInUp(
+                          from: 50,
+                          delay: 500.milliseconds,
+                          duration: 600.milliseconds,
+                          child: Text(
+                            song.name,
+                            style: montserratText.copyWith(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
                         ),
-                        Text(
-                          song.artist,
-                          style: montserratText.copyWith(
-                            fontSize: 14.0,
+                        FadeInUp(
+                          from: 50,
+                          delay: 550.milliseconds,
+                          duration: 600.milliseconds,
+                          child: Text(
+                            song.artist,
+                            style: montserratText.copyWith(
+                              fontSize: 14.0,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 20.0),
                         BlocBuilder<DetailsBloc, DetailsState>(builder: (context, state) {
@@ -136,32 +146,40 @@ class DetailsScreen extends StatelessWidget {
                           return Center(
                             child: Column(
                               children: [
-                                AnimatedProgressBar(
-                                  width: context.height * 0.5,
-                                  value: state.progress,
-                                  bgColor: Theme.of(context).colorScheme.surfaceTint.withOpacity(0.5),
-                                  progressColor: Theme.of(context).colorScheme.surfaceTint,
-                                  radius: BorderRadius.circular(20),
+                                ZoomIn(
+                                  delay: 800.milliseconds,
+                                  duration: 600.milliseconds,
+                                  child: AnimatedProgressBar(
+                                    width: context.height * 0.5,
+                                    value: state.progress,
+                                    bgColor: Theme.of(context).colorScheme.surfaceTint.withOpacity(0.5),
+                                    progressColor: Theme.of(context).colorScheme.surfaceTint,
+                                    radius: BorderRadius.circular(20),
+                                  ),
                                 ),
                                 const SizedBox(height: 16.0),
-                                IconButton(
-                                  icon: SizedBox(
-                                    height: 70,
-                                    width: 70,
-                                    child: CircleAvatar(
-                                      backgroundColor: primaryColor,
-                                      foregroundColor: Colors.white,
-                                      child: AnimatedCrossFade(
-                                        firstChild: const Icon(Icons.play_arrow),
-                                        secondChild: const Icon(Icons.pause),
-                                        crossFadeState: state.isPlaying ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                                        duration: 300.milliseconds,
+                                ZoomIn(
+                                  delay: 900.milliseconds,
+                                  duration: 600.milliseconds,
+                                  child: IconButton(
+                                    icon: SizedBox(
+                                      height: 70,
+                                      width: 70,
+                                      child: CircleAvatar(
+                                        backgroundColor: primaryColor,
+                                        foregroundColor: Colors.white,
+                                        child: AnimatedCrossFade(
+                                          firstChild: const Icon(Icons.play_arrow),
+                                          secondChild: const Icon(Icons.pause),
+                                          crossFadeState: state.isPlaying ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                                          duration: 300.milliseconds,
+                                        ),
                                       ),
                                     ),
+                                    onPressed: () {
+                                      context.read<DetailsBloc>().add(SongPlayPauseRequested());
+                                    },
                                   ),
-                                  onPressed: () {
-                                    context.read<DetailsBloc>().add(SongPlayPauseRequested());
-                                  },
                                 ),
                               ],
                             ),
@@ -173,11 +191,15 @@ class DetailsScreen extends StatelessWidget {
                         BlocBuilder<UserBloc, UserState>(
                           builder: (context, state) {
                             bool isFavorite = (state as UserLoaded).user.favorites.contains(song.id);
-                            return FavoritesButton(
-                              isFavorite: isFavorite,
-                              onTap: () {
-                                context.read<UserBloc>().add(UserFavoritesUpdateRequested(song.id));
-                              },
+                            return ZoomIn(
+                              delay: 1000.milliseconds,
+                              duration: 600.milliseconds,
+                              child: FavoritesButton(
+                                isFavorite: isFavorite,
+                                onTap: () {
+                                  context.read<UserBloc>().add(UserFavoritesUpdateRequested(song.id));
+                                },
+                              ),
                             );
                           },
                         ),

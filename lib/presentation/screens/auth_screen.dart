@@ -33,7 +33,6 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Center(
@@ -50,8 +49,10 @@ class _AuthScreenState extends State<AuthScreen> {
             },
             builder: (context, state) {
               if (state is AuthLoading || state is AuthSuccess) {
-                return CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.surfaceTint,
+                return FadeInUp(
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.surfaceTint,
+                  ),
                 );
               }
 
@@ -71,16 +72,25 @@ class _AuthScreenState extends State<AuthScreen> {
                     children: [
                       const Logo(),
                       const SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
-                      InputField(
-                        controller: emailController,
-                        hint: "Email",
+                      FadeInUp(
+                        duration: 500.milliseconds,
+                        child: InputField(
+                          controller: emailController,
+                          inputType: TextInputType.emailAddress,
+                          hint: "Email",
+                        ),
                       ),
-                      InputField(
-                        controller: passwordController,
-                        hint: "Password",
-                        inputType: TextInputType.visiblePassword,
+                      FadeInUp(
+                        delay: 100.milliseconds,
+                        duration: 500.milliseconds,
+                        child: InputField(
+                          controller: passwordController,
+                          hint: "Password",
+                          textInputAction: isSignInPage ? TextInputAction.done : TextInputAction.none,
+                          inputType: TextInputType.visiblePassword,
+                        ),
                       ),
                       AnimatedContainer(
                         duration: 500.milliseconds,
@@ -100,27 +110,33 @@ class _AuthScreenState extends State<AuthScreen> {
                       const SizedBox(
                         height: 5,
                       ),
-                      Button(
-                        label: isSignInPage ? "Sign In" : "Sign Up",
-                        onTap: () {
-                          if (isSignInPage) {
-                            context.read<AuthBloc>().add(AuthLoginRequested(emailController.text.trim(), passwordController.text.trim()));
-                            return;
-                          }
-                          context.read<AuthBloc>().add(
-                              AuthSignupRequested(emailController.text.trim(), passwordController.text.trim(), confirmPasswordController.text.trim()));
-                        },
+                      FadeInUp(
+                        delay: 200.milliseconds,
+                        child: Button(
+                          label: isSignInPage ? "Sign In" : "Sign Up",
+                          onTap: () {
+                            if (isSignInPage) {
+                              context.read<AuthBloc>().add(AuthLoginRequested(emailController.text.trim(), passwordController.text.trim()));
+                              return;
+                            }
+                            context.read<AuthBloc>().add(AuthSignupRequested(
+                                emailController.text.trim(), passwordController.text.trim(), confirmPasswordController.text.trim()));
+                          },
+                        ),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
-                      TextButton(
-                        onPressed: () {
-                          context.read<AuthBloc>().add(AuthFormChangeRequested());
-                        },
-                        child: Text(
-                          isSignInPage ? "New here? Create an account." : "Already have an account? Sign in instead.",
-                          style: montserratText,
+                      FadeInUp(
+                        delay: 300.milliseconds,
+                        child: TextButton(
+                          onPressed: () {
+                            context.read<AuthBloc>().add(AuthFormChangeRequested());
+                          },
+                          child: Text(
+                            isSignInPage ? "New here? Create an account." : "Already have an account? Sign in instead.",
+                            style: montserratText,
+                          ),
                         ),
                       )
                     ],
