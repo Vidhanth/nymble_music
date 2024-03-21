@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:animate_do/animate_do.dart';
 import 'package:animated_progress_bar/animated_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,26 +58,39 @@ class DetailsScreen extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(20, kBottomNavigationBarHeight + 20, 20, 20),
                   child: Column(
                     children: [
-                      PhysicalModel(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(15),
-                        elevation: 10,
-                        child: Hero(
-                          tag: song.albumUrl,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15.0),
-                            child: SizedBox(
-                              height: context.height * 0.45,
-                              child: AspectRatio(
-                                aspectRatio: 1,
-                                child: Image.network(
-                                  song.albumUrl,
-                                  fit: BoxFit.cover,
+                      Stack(
+                        children: [
+                          FadeIn(
+                            delay: 700.milliseconds,
+                            child: PhysicalModel(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(15),
+                              elevation: 10,
+                              child: SizedBox(
+                                height: context.height * 0.45,
+                                child: const AspectRatio(
+                                  aspectRatio: 1,
                                 ),
                               ),
                             ),
                           ),
-                        ),
+                          Hero(
+                            tag: song.albumUrl,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15.0),
+                              child: SizedBox(
+                                height: context.height * 0.45,
+                                child: AspectRatio(
+                                  aspectRatio: 1,
+                                  child: Image.network(
+                                    song.albumUrl,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                       const Spacer(),
                       const SizedBox(
